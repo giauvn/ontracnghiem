@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luyện tập Trắc nghiệm - Thuật toán Sắp xếp & Tìm kiếm</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --success: #16a34a;
+      --success-bg: #dcfce7;
+      --error: #dc2626;
+      --error-bg: #fee2e2;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --shadow: 0 10px 25px -5px rgb(0 0 0 / 0.08), 0 4px 10px -4px rgb(0 0 0 / 0.04);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 50%, #f8fafc 100%);
+      min-height: 100vh;
+      color: var(--text);
+      line-height: 1.6;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    header h1 {
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+
+    header p {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .progress-wrap {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 16px 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .progress-bar {
+      height: 10px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), #3b82f6);
+      border-radius: 999px;
+      transition: width 0.4s ease;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 28px 26px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+
+    .question-num {
+      display: inline-block;
+      background: #dbeafe;
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 0.85rem;
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 14px;
+    }
+
+    .question-text {
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-bottom: 22px;
+      white-space: pre-line;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .option {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: #fff;
+    }
+
+    .option:hover:not(.disabled) {
+      border-color: #93c5fd;
+      background: #f0f9ff;
+    }
+
+    .option.selected {
+      border-color: var(--primary);
+      background: #eff6ff;
+    }
+
+    .option.correct {
+      border-color: var(--success);
+      background: var(--success-bg);
+    }
+
+    .option.wrong {
+      border-color: var(--error);
+      background: var(--error-bg);
+    }
+
+    .option.disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    .option input {
+      margin-top: 3px;
+      accent-color: var(--primary);
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .option-label {
+      flex: 1;
+      font-size: 0.98rem;
+    }
+
+    .option-key {
+      font-weight: 700;
+      color: var(--primary);
+      margin-right: 6px;
+    }
+
+    .feedback {
+      margin-top: 20px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .feedback.show {
+      display: block;
+    }
+
+    .feedback.correct {
+      background: var(--success-bg);
+      color: #166534;
+      border: 1px solid #86efac;
+    }
+
+    .feedback.wrong {
+      background: var(--error-bg);
+      color: #991b1b;
+      border: 1px solid #fca5a5;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-secondary {
+      background: #e2e8f0;
+      color: var(--text);
+    }
+
+    .btn-secondary:hover {
+      background: #cbd5e1;
+    }
+
+    /* Result screen */
+    .result-screen {
+      text-align: center;
+      padding: 20px 10px;
+    }
+
+    .result-screen h2 {
+      font-size: 1.6rem;
+      margin-bottom: 12px;
+      color: var(--primary);
+    }
+
+    .score-circle {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 24px auto;
+      border: 6px solid var(--primary);
+    }
+
+    .score-circle .score {
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1;
+    }
+
+    .score-circle .label {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 28px;
+      margin: 20px 0 28px;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat .num {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .stat .lbl {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 520px) {
+      body { padding: 12px; }
+      .card { padding: 20px 16px; }
+      header h1 { font-size: 1.35rem; }
+      .question-text { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Luyện tập Trắc nghiệm</h1>
+      <p>Thuật toán Sắp xếp &amp; Tìm kiếm · Chọn đúng mới được qua câu tiếp theo</p>
+    </header>
+
+    <!-- Progress -->
+    <div class="progress-wrap" id="progressWrap">
+      <div class="progress-info">
+        <span id="progressText">Câu 1 / 21</span>
+        <span id="attemptInfo">Lần thử: 0</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <!-- Quiz Card -->
+    <div class="card" id="quizCard">
+      <div class="question-num" id="qNum">Câu hỏi 1</div>
+      <div class="question-text" id="qText"></div>
+
+      <div class="options" id="options"></div>
+
+      <div class="feedback" id="feedback"></div>
+
+      <div class="actions">
+        <button class="btn-primary" id="btnNext" disabled>Kiểm tra</button>
+      </div>
+    </div>
+
+    <!-- Result Screen -->
+    <div class="card result-screen hidden" id="resultScreen">
+      <h2>Hoàn thành!</h2>
+      <p style="color: var(--muted)">Bạn đã luyện xong tất cả câu hỏi.</p>
+
+      <div class="score-circle">
+        <div class="score" id="finalScore">0</div>
+        <div class="label">điểm</div>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="num" id="statCorrect">0</div>
+          <div class="lbl">Câu đúng lần đầu</div>
+        </div>
+        <div class="stat">
+          <div class="num" id="statTotal">21</div>
+          <div class="lbl">Tổng số câu</div>
+        </div>
+        <div class="stat">
+          <div class="num" id="statAttempts">0</div>
+          <div class="lbl">Tổng lần thử</div>
+        </div>
+      </div>
+
+      <button class="btn-primary" id="btnRestart" style="min-width: 180px;">Làm lại từ đầu</button>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        id: 1,
+        text: "Áp dụng giải thuật sắp xếp nổi bọt (Bubble Sort) trên dãy số: 19 3 13 10 2 18 5 7\nTổng số lần hoán vị sau vòng lặp thứ hai là bao nhiêu?",
+        options: ["8", "7", "9", "6"],
+        answer: "c",
+        hint: "Hãy mô phỏng lại 2 vòng lặp đầu của Bubble Sort và đếm số lần hoán vị."
+      },
+      {
+        id: 2,
+        text: "Áp dụng giải thuật sắp xếp chèn trực tiếp (Insertion Sort) trên dãy số: 19 3 13 10 2 18 5 7\nTổng số lần dời chỗ sau vòng lặp thứ tư là bao nhiêu?",
+        options: ["6", "7", "5", "8"],
+        answer: "d",
+        hint: "Với Insertion Sort, đếm tổng số lần dịch chuyển phần tử trong 4 vòng chèn đầu tiên."
+      },
+      {
+        id: 3,
+        text: "Áp dụng giải thuật sắp xếp chọn trực tiếp (Selection Sort) trên dãy số: 19 3 13 10 2 18 5 7\nTổng số lần hoán vị sau vòng lặp thứ tư là bao nhiêu?",
+        options: ["4", "5", "3", "2"],
+        answer: "c",
+        hint: "Selection Sort mỗi vòng chỉ hoán vị tối đa 1 lần (nếu phần tử nhỏ nhất không ở đúng vị trí)."
+      },
+      {
+        id: 4,
+        text: "Áp dụng giải thuật sắp xếp đổi chỗ trực tiếp (Interchange Sort) tăng dần trên dãy số: 19 3 13 10 2 18 5 7.\nTổng số lần hoán vị sau vòng lặp thứ hai là bao nhiêu?",
+        options: ["8", "5", "7", "6"],
+        answer: "b",
+        hint: "Interchange Sort so sánh từng cặp i với j (j > i). Hãy đếm số lần đổi chỗ trong 2 vòng i đầu."
+      },
+      
+    ];
+
+    // State
+    let currentIndex = 0;
+    let selectedAnswer = null;
+    let isChecked = false;
+    let totalAttempts = 0;
+    let correctFirstTry = 0;
+    let firstTry = true;
+
+    const keys = ["a", "b", "c", "d"];
+
+    // DOM
+    const qNum = document.getElementById("qNum");
+    const qText = document.getElementById("qText");
+    const optionsEl = document.getElementById("options");
+    const feedback = document.getElementById("feedback");
+    const btnNext = document.getElementById("btnNext");
+    const progressText = document.getElementById("progressText");
+    const progressFill = document.getElementById("progressFill");
+    const attemptInfo = document.getElementById("attemptInfo");
+    const quizCard = document.getElementById("quizCard");
+    const resultScreen = document.getElementById("resultScreen");
+    const progressWrap = document.getElementById("progressWrap");
+
+    function loadQuestion() {
+      const q = questions[currentIndex];
+      selectedAnswer = null;
+      isChecked = false;
+      firstTry = true;
+
+      qNum.textContent = `Câu hỏi ${q.id}`;
+      qText.textContent = q.text;
+
+      optionsEl.innerHTML = "";
+      q.options.forEach((opt, i) => {
+        const div = document.createElement("div");
+        div.className = "option";
+        div.dataset.key = keys[i];
+        div.innerHTML = `
+          <input type="radio" name="answer" id="opt${i}" value="${keys[i]}" />
+          <label class="option-label" for="opt${i}">
+            <span class="option-key">${keys[i].toUpperCase()}.</span> ${opt}
+          </label>
+        `;
+        div.addEventListener("click", () => selectOption(div, keys[i]));
+        optionsEl.appendChild(div);
+      });
+
+      feedback.className = "feedback";
+      feedback.textContent = "";
+      btnNext.textContent = "Kiểm tra";
+      btnNext.disabled = true;
+
+      // Progress
+      const pct = (currentIndex / questions.length) * 100;
+      progressFill.style.width = pct + "%";
+      progressText.textContent = `Câu ${currentIndex + 1} / ${questions.length}`;
+      attemptInfo.textContent = `Lần thử: ${totalAttempts}`;
+    }
+
+    function selectOption(el, key) {
+      if (isChecked && key !== questions[currentIndex].answer) return; // after wrong, only allow reselect
+
+      // Clear previous selection styles (except locked correct)
+      document.querySelectorAll(".option").forEach(o => {
+        if (!o.classList.contains("correct")) {
+          o.classList.remove("selected", "wrong");
+        }
+      });
+
+      el.classList.add("selected");
+      selectedAnswer = key;
+      document.getElementById(el.querySelector("input").id).checked = true;
+
+      btnNext.disabled = false;
+    }
+
+    function checkAnswer() {
+      const q = questions[currentIndex];
+      totalAttempts++;
+      attemptInfo.textContent = `Lần thử: ${totalAttempts}`;
+
+      if (selectedAnswer === q.answer) {
+        // Correct
+        isChecked = true;
+        document.querySelectorAll(".option").forEach(o => {
+          o.classList.add("disabled");
+          if (o.dataset.key === q.answer) {
+            o.classList.remove("selected", "wrong");
+            o.classList.add("correct");
+          }
+        });
+
+        feedback.className = "feedback show correct";
+        feedback.innerHTML = firstTry
+          ? "✅ Chính xác! Bạn đã chọn đúng ngay lần đầu."
+          : "✅ Đúng rồi! Tiếp tục nhé.";
+
+        if (firstTry) correctFirstTry++;
+
+        btnNext.textContent = currentIndex === questions.length - 1 ? "Xem kết quả" : "Câu tiếp theo →";
+        btnNext.disabled = false;
+
+        // Temporarily change handler
+        btnNext.onclick = nextQuestion;
+      } else {
+        // Wrong
+        firstTry = false;
+        isChecked = true;
+
+        document.querySelectorAll(".option").forEach(o => {
+          if (o.dataset.key === selectedAnswer) {
+            o.classList.remove("selected");
+            o.classList.add("wrong");
+          }
+        });
+
+        feedback.className = "feedback show wrong";
+        feedback.innerHTML = `❌ Sai rồi! Gợi ý: ${q.hint}<br><strong>Hãy chọn lại đáp án đúng để tiếp tục.</strong>`;
+
+        btnNext.textContent = "Chọn lại";
+        btnNext.disabled = true;
+
+        // Allow reselection
+        setTimeout(() => {
+          isChecked = false;
+          document.querySelectorAll(".option").forEach(o => {
+            if (!o.classList.contains("correct")) {
+              o.classList.remove("disabled", "wrong");
+            }
+          });
+        }, 600);
+      }
+    }
+
+    function nextQuestion() {
+      currentIndex++;
+      if (currentIndex >= questions.length) {
+        showResult();
+      } else {
+        btnNext.onclick = checkAnswer;
+        loadQuestion();
+      }
+    }
+
+    function showResult() {
+      quizCard.classList.add("hidden");
+      progressWrap.classList.add("hidden");
+      resultScreen.classList.remove("hidden");
+
+      const score = Math.round((correctFirstTry / questions.length) * 100);
+      document.getElementById("finalScore").textContent = score;
+      document.getElementById("statCorrect").textContent = correctFirstTry;
+      document.getElementById("statTotal").textContent = questions.length;
+      document.getElementById("statAttempts").textContent = totalAttempts;
+    }
+
+    function restart() {
+      currentIndex = 0;
+      totalAttempts = 0;
+      correctFirstTry = 0;
+      resultScreen.classList.add("hidden");
+      quizCard.classList.remove("hidden");
+      progressWrap.classList.remove("hidden");
+      btnNext.onclick = checkAnswer;
+      loadQuestion();
+    }
+
+    // Init
+    btnNext.onclick = checkAnswer;
+    document.getElementById("btnRestart").onclick = restart;
+    loadQuestion();
+  </script>
+</body>
+</html>
