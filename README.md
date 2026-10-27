@@ -1,2 +1,2 @@
 # Luyện tập tìm m - Đại số tuyến tính
-### [Luyện tập](https://github.io)
+### [Luyện tập](https://giauvn.github.io/ontracnghiem/tim_m.html)
