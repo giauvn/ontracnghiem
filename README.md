@@ -10,3 +10,5 @@
 ##### [Luyện tập](https://giauvn.github.io/ontracnghiem/ctdl_dayso_Pronode.html)
 ### Các câu liên quan hàm ProList. 
 ##### [Luyện tập](https://giauvn.github.io/ontracnghiem/ctdl_dayso_ProList.html)
+### Các câu liên quan hàm ProSort. 
+##### [Luyện tập](https://giauvn.github.io/ontracnghiem/ctdl_dayso_ProSort.html)
