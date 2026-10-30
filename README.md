@@ -11,4 +11,6 @@
 ### Các câu liên quan hàm ProList. 
 ##### [Luyện tập](https://giauvn.github.io/ontracnghiem/ctdl_dayso_ProList.html)
 ### Các câu liên quan hàm ProSort. 
-##### [Luyện tập](https://giauvn.github.io/ontracnghiem/ctdl_dayso_ProSort.html)
+##### [Luyện tập](https://giauvn.github.io/ontracnghiem/ctdl_dayso_ProSort.html) 
+### Các câu liên quan độ phức tạp của giải thuật. 
+##### [Luyện tập](https://giauvn.github.io/ontracnghiem/ctdl_dayso_dophuctapcuargiaithuat.html) 
