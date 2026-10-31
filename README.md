@@ -14,3 +14,5 @@
 ##### [Luyện tập](https://giauvn.github.io/ontracnghiem/ctdl_dayso_ProSort.html) 
 ### Các câu liên quan độ phức tạp của giải thuật. 
 ##### [Luyện tập](https://giauvn.github.io/ontracnghiem/ctdl_dayso_dophuctapcuargiaithuat.html) 
+### Các câu liên quan phương pháp băm. 
+##### [Luyện tập](https://giauvn.github.io/ontracnghiem/ctdl_dayso_phuongphapbam.html) 
